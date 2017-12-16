@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>订单管理</title>
+	<link href="css/billManage.css" rel="stylesheet"/>
+	<link href="css/main.css" rel="stylesheet"/>
+	<link href="css/md-ui.css" rel="stylesheet"/>
+</head>
+<body>
+<div id="box">
+	<div id="content">
+		<div id="title">
+			<p>超市订单管理系统-订单管理界面</p>
+		</div>
+		<div id="b1">
+			<input  class="md-ui" type="text" id="productName" title="产品名称:"/>
+		</div>
+		<div id="b2">
+			供应商名:<select  id="proName"></select>
+		</div>
+		<div id="b3">
+			<button class="md-ui" id="btn" ></button>
+		</div>
+		<div id="up1">
+			<button id="btn1">添加订单</button>
+		</div>
+		<div id="b4">
+			<table class="t1" id="table">
+			</table>
+		</div>
+		<div id="pagediv2">
+			<a href="#" onclick="jump(this)">首页</a> <a href="#"
+			                                           onclick="jump(this)">上一页</a> <a href="#"
+			                                                                           onclick="jump(this)">下一页</a>
+			<a href="#" onclick="jump(this)">末 页</a> <input type="text"
+			                                                class="textnum" id="textnum"/> <a
+				href="#"
+				onclick="appointpage()">跳转到</a>
+		</div>
+	</div>
+</div>
+<!--通用div引入-->
+<div id="msg-box" class="msg-hide"></div>
+<!--通用js文件加载-->
+<script src="js/jquery3.1.js" type="text/javascript"></script>
+<script src="js/md-ui.js" type="text/javascript"></script>
+<script src="js/generic.js" type="text/javascript"></script>
+<!--本页面专用js文件-->
+<script src="js/billManage/billManage.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var md = new MdUi();
+	md.init();
+	var bill = new bill();
+	bill.init();
+</script>
+</body>
+</html>

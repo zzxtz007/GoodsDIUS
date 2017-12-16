@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.haha233.dal.BillMapper">
+    <insert id="save">
+        INSERT INTO smbms_bill (billCode, productName, productDesc, productUnit, productCount, totalPrice, isPayment, createdBy, creationDate, modifyBy, modifyDate, providerId)
+        VALUES (#{billPo.billCode}, #{billPo.productName}, #{billPo.productDesc},
+                                    #{billPo.productUnit}, #{billPo.productCount},
+                                    #{billPo.totalPrice}, #{billPo.isPayment}, 1, now(), 1, now(),
+                #{billPo.providerId});
+    </insert>
+    <update id="update">
+        update smbms_bill
+        <set>
+            <if test="#{billPo.billCode}!=null">
+                billCode =#{billPo.billCode},
+            </if>
+            <if test="#{billPo.productName}!=null">
+                productName=#{billPo.productName},
+            </if>
+            <if test="#{billPo.productDesc}!=null">
+                productDesc=#{billPo.productDesc},
+            </if>
+            <if test="#{billPo.productUnit}!=null">
+                productUnit=#{billPo.productUnit},
+            </if>
+            <if test="#{billPo.productCount}!=null">
+                productCount=#{billPo.productCount},
+            </if>
+            <if test="#{billPo.totalPrice}!=null">
+                totalPrice=#{billPo.totalPrice},
+            </if>
+            <if test="#{billPo.isPayment}!=null">
+                isPayment=#{billPo.isPayment},
+            </if>
+            <if test="#{billPo.providerId}!=null">
+                providerId=#{billPo.providerId},
+            </if>
+            <if test="1==1">
+                modifyBy=1,
+            </if>
+            <if test="1==1">
+                modifyDate=now(),
+            </if>
+        </set>
+        where id=#{billPo.id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM smbms_bill
+        WHERE id = #{billPo.id}
+    </delete>
+
+    <resultMap id="billBo" type="BillBo" autoMapping="true">
+        <association property="providerId" javaType="ProviderPo" columnPrefix="p_"
+                     autoMapping="true"/>
+    </resultMap>
+    <sql id="generic-select">
+        <where>
+            <if test="billPo.id!=null">
+                b.id=#{billPo.id}
+            </if>
+            <if test="billPo.billCode!=null and billPo.billCode!=''">
+                AND billCode =#{billPo.billCode}
+            </if>
+            <if test="billPo.productName!=null and billPo.productName!=''">
+                AND productName like #{billPo.productName}"%"
+            </if>
+            <if test="billPo.productDesc!=null and billPo.productDesc!=''">
+                AND productDesc=#{billPo.productDesc}
+            </if>
+            <if test="billPo.productUnit!=null and billPo.productUnit!=''">
+                AND productUnit=#{billPo.productUnit}
+            </if>
+            <if test="billPo.productCount!=null">
+                AND productCount=#{billPo.productCount}
+            </if>
+            <if test="billPo.totalPrice!=null">
+                AND totalPrice=#{billPo.totalPrice}
+            </if>
+            <if test="billPo.isPayment!=null">
+                AND isPayment=#{billPo.isPayment}
+            </if>
+            <if test="billPo.providerId!=null">
+                AND providerId=#{billPo.providerId}
+            </if>
+        </where>
+    </sql>
+    <select id="query" resultMap="billBo">
+        SELECT
+        b.id as id,
+        b.*,
+        providerId as p_id,
+        proCode as p_proCode,
+        proName as p_proName,
+        proDesc as p_proDesc,
+        proContact as p_proContact,
+        proPhone as p_proPhone,
+        proAddress as p_proAddress,
+        proFax as p_proFax
+        FROM smbms_bill b
+        LEFT JOIN smbms_provider p
+        ON b.providerId = p.id
+        <include refid="generic-select"/>
+        LIMIT #{startIndex} ,#{count}
+    </select>
+    <select id="count"resultType="int">
+        select
+        count(id)
+        from smbms_bill
+        <include refid="generic-select"/>
+    </select>
+</mapper>

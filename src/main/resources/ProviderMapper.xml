@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.haha233.dal.ProviderMapper">
+    <resultMap id="providerBo" type="ProviderBo" autoMapping="true">
+    </resultMap>
+    <sql id="generic-select">
+        <where>
+            <if test="providerPo.id!=null">
+                id=#{providerPo.id}
+            </if>
+            <if test="providerPo.proCode!=null and providerPo.proCode!=''">
+                AND proCode =#{providerPo.proCode}
+            </if>
+            <if test="providerPo.proName!=null and providerPo.proName!=''">
+                AND proName like #{providerPo.proName}"%"
+            </if>
+            <if test="providerPo.proDesc!=null and providerPo.proDesc!=''">
+                AND proDesc=#{providerPo.proDesc}
+            </if>
+            <if test="providerPo.proContact!=null and providerPo.proContact!=''">
+                AND proContact=#{providerPo.proContact}
+            </if>
+            <if test="providerPo.proPhone!=null">
+                AND proPhone=#{providerPo.proPhone}
+            </if>
+            <if test="providerPo.proAddress!=null">
+                AND proAddress=#{providerPo.proAddress}
+            </if>
+            <if test="providerPo.proFax!=null">
+                AND proFax=#{providerPo.proFax}
+            </if>
+        </where>
+    </sql>
+    <select id="query" resultMap="providerBo">
+        select
+        id,
+        proCode,
+        proName,
+        proDesc,
+        proContact,
+        proPhone,
+        proAddress,
+        proFax
+        from smbms_provider
+        <include refid="generic-select"/>
+    </select>
+</mapper>
