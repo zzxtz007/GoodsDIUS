@@ -9,6 +9,9 @@ function bill() {
     };
 
 
+    /**
+     * 初始化 供应商选择
+     */
     function initPro() {
         $.ajax({
             url: "/api/provider/query",
@@ -32,18 +35,30 @@ function bill() {
         })
     }
 
+    /**
+     * 初始化table
+     */
     function initTable() {
+        searchKey={};
+        let providerId = $("#proName").val();
+        let productName = $("#productName").val();
+        if (providerId!==''){
+            searchKey["providerId"] = providerId;
+        }
+        if (productName!==''){
+            searchKey["productName"] = productName;
+        }
         searchKey["pageNum"] = currentPage;
         searchKey["pageSize"] = pageSize;
-        console.log(searchKey);
-        create();
         gotoPage();
     }
 
     function initSelect(providers) {
         let select = $("#proName");
+        let option = $("<option value=''>--请选择--</option>");
+        select.append(option);
         for (let provider of providers) {
-            let option = $("<option value='" + provider.id + "'>" + provider.proName + "</option>");
+            option = $("<option value='" + provider.id + "'>" + provider.proName + "</option>");
             select.append(option);
         }
     }

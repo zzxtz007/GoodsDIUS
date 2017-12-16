@@ -105,7 +105,7 @@
         <include refid="generic-select"/>
         LIMIT #{startIndex} ,#{count}
     </select>
-    <select id="count"resultType="int">
+    <select id="count" resultType="int">
         select
         count(id)
         from smbms_bill

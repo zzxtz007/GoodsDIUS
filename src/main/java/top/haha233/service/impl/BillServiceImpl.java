@@ -215,7 +215,6 @@ public class BillServiceImpl implements BillService {
 		bill.setTotalPrice(newTotalPrice);
 		bill.setProviderId(newProviderId);
 		bill.setIsPayment(newIsPayment);
-		System.out.println(bill);
 		//mybatis去操作数据库 4 数据库操作错误
 		SqlSession sqlSession;
 		sqlSession = MyBatisUtil.createSqlSession();
