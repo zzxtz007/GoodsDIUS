@@ -3,11 +3,11 @@ function bill() {
     let currentPage = 1;
     let pageSize = 3;
     let searchKey = {};
+
     this.init = function () {
         initPro();
         initTable();
     };
-
 
     /**
      * 初始化 供应商选择
@@ -32,25 +32,64 @@ function bill() {
             tableRespHandler(response);
         }).fail(function () {
             alert("未知错误,请稍后再试");
-        })
+        });
+    }
+
+    /**
+     * 获得总页数
+     * @param response
+     */
+    function getTotalPage(response) {
+        let err = response.status;
+        console.log(response.count);
+        switch (err) {
+            case 0: {
+                totalPage=parseInt(response.count)%pageSize==0?parseInt(response.count)/pageSize:parseInt(response.count)/pageSize+1;
+                break;
+            }
+            case 3:
+            case 4:
+            default: {
+                showMsg('未知错误，请稍后再试', 'err');
+                break;
+            }
+        }
+    }
+
+    /**
+     * 初始化 搜索key
+     */
+    function initSearch() {
+        searchKey={};
+        let providerId = $("#proName").val();
+        let productName = $("#productName").val();
+        if (productName !== ''){
+            searchKey["productName"] = productName;
+        }
+        if (providerId !== '' && providerId !== null){
+            searchKey["providerId"] = providerId;
+        }
+        searchKey["pageNum"] = currentPage;
+        searchKey["pageSize"] = pageSize;
+        $.ajax({
+            url:"/api/bill/count",
+            type:"get",
+            data:searchKey
+        }).done(function (response) {
+            getTotalPage(response);
+        }).fail(function () {
+            alert("未知错误,请稍后再试");
+        });
     }
 
     /**
      * 初始化table
      */
     function initTable() {
-        searchKey={};
-        let providerId = $("#proName").val();
-        let productName = $("#productName").val();
-        if (providerId!==''){
-            searchKey["providerId"] = providerId;
-        }
-        if (productName!==''){
-            searchKey["productName"] = productName;
-        }
-        searchKey["pageNum"] = currentPage;
-        searchKey["pageSize"] = pageSize;
-        gotoPage();
+
+        let initS = initSearch();
+        let gotoP = gotoPage();
+
     }
 
     function initSelect(providers) {
@@ -158,7 +197,7 @@ function bill() {
             default:
                 currentPage = parseInt(btn.innerText);
         }
-        console.log("当前页面为" + currentPage);
+        console.log("当前页面为");
     }
 
 }
